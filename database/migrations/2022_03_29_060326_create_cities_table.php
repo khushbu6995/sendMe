@@ -18,8 +18,10 @@ class CreateCitiesTable extends Migration
             $table->string('name');
             $table->foreignId('state_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('country_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->softDeletes(); 
             $table->timestamps();
         });
+        Schema::enableForeignKeyConstraints();
     }
 
     /**

@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class productRequest extends FormRequest
 {
@@ -24,8 +26,18 @@ class productRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'=>'require|max:255',
+            'name'=>'required|max:255',
             'category'=>'required',
         ];
+    }
+
+    /**
+    * Get the failled validation message on failled to validate.
+    *
+    * @param $validator
+    * @author Khushbu Waghela
+    */
+    protected function failedValidation(Validator $validator) {
+        throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 }

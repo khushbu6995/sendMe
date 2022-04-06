@@ -5,6 +5,12 @@ namespace App\Repository;
 interface UserInterface
 {
     /**
+    *   get all record from user table
+    *   @author Khushbu Waghela 
+    */
+    public function all_record();
+
+    /**
     *   @param $insertFields
     *   add new record in user table
     *   @author Khushbu Waghela 

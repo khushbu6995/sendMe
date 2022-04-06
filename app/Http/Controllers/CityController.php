@@ -3,85 +3,96 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\CityManagement;
+use App\Repository\CityRepository;
+use App\Repository\StateRepository;
 use App\Repository\CountryRepository;
-use App\Services\CountryManagement;
-use App\Http\Requests\CountryRequest;
+use App\Http\Requests\CityRequest;
 use Throwable;
 use Illuminate\Support\Facades\Log;
 
-class CountryCountroller extends Controller
+class cityController extends Controller
 {
+    public $city_repo;
+    public $state_repo;
     public $country_repo;
     public $class;
-    public function __construct(CountryRepository $country_repo,CountryManagement $class)
+    public function __construct(CityRepository $city_repo,StateRepository $state_repo,CountryRepository $country_repo,CityManagement $class)
     {
-        $this->country_repo = $country_repo;
+        $this->city_repo = $city_repo;
+        $this->state_repo = $state_repo;
         $this->class=$class;
     }
 
     /**
-    * get data from country
+    * get data from city
     * @author Khushbu Waghela
     */
     public function index()
     {
         try{
-        return $this->country_repo->all_record();
-        }catch(Throwable $e){
+        return $this->city_repo->all_record();;
+        }catch(Throwable $e)
+        {
             return Log::error($e->getMessage);
         }
     }
 
     /**
     * @param $request
-    * add new country 
+    * add new city 
     * @author Khushbu Waghela
     */
-    public function insertCountry(CountryRequest $request)
+    public function insertCity(CityRequest $request)
     {
         try{
         $insertFields=[
             'name'=>$request->name,
-            'code'=>$request->code,
+            'state_id'=>$request->state,
+            'country_id'=>$request->country,
         ];
         $result=$this->class->insertRecord($insertFields);
         return $result;
-        }catch(Throwable $e){
+        }catch(Throwable $e)
+        {
             return Log::error($e->getMessage);
         }
     }
 
     /**
     * @param $request
-    * edit existing country
+    * edit existing city
     * @author Khushbu Waghela
     */
-    public function updateCountry(Request $request)
+    public function updateCity(Request $request)
     {
         try{
         $update=[
             'id'=>$request->id,
             'name'=>$request->name,
-            'code'=>$request->code,
+            'state_id'=>$request->state,
+            'country_id'=>$request->country,
         ];
         $result=$this->class->updateRecord($update);
         return $result;
-        }catch(Throwable $e){
+        }catch(Throwable $e)
+        {
             return Log::error($e->getMessage);
         }
     }
 
     /**
     * @param $id
-    * delete existing country
+    * delete existing city
     * @author Khushbu Waghela
     */
-    public function deleteCountry(Request $request)
+    public function deleteCity(Request $request)
     {
         try{
         $result=$this->class->deleteRecord($request['id']);
         return $result;
-        }catch(Throwable $e){
+        }catch(Throwable $e)
+        {
             return Log::error($e->getMessage);
         }
     }

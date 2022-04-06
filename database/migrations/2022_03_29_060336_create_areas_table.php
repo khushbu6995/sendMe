@@ -19,8 +19,10 @@ class CreateAreasTable extends Migration
             $table->foreignId('city_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('state_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('country_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->softDeletes(); 
             $table->timestamps();
         });
+        Schema::enableForeignKeyConstraints();
     }
 
     /**

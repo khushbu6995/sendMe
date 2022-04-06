@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('email');
             $table->string('gender');
             $table->string('otp')->nullable();
+            $table->softDeletes(); 
             // $table->timestamp('email_verified_at')->nullable();
             // $table->string('password');
             $table->rememberToken();

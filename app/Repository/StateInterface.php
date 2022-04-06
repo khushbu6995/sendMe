@@ -19,6 +19,13 @@ interface StateInterface
     public function id_find($id);
 
     /**
+    *   @param $id
+    *   find country id from state table
+    *   @author Khushbu Waghela 
+    */
+    public function country_id($id);
+
+    /**
     *   @param $update[]
     *   get all record from State table
     *   @author Khushbu Waghela 

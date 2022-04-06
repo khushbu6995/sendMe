@@ -39,4 +39,24 @@ interface AreaInterface
     */
     public function delete(array $delete);
 
+     /**
+    *   @param $id
+    *   find state id from area table
+    *   @author Khushbu Waghela 
+    */
+    public function state_id($id);
+  
+     /**
+      *   @param $id
+      *   find city id from area table
+      *   @author Khushbu Waghela 
+      */
+      public function city_id($id);
+  
+     /**
+     *   @param $id
+     *   find country id from area table
+     *   @author Khushbu Waghela 
+     */
+     public function country_id($id);
 }

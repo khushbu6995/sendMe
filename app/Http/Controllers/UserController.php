@@ -3,20 +3,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 use App\Services\UserManagement;
-use App\Http\Requests\userRequest;
-use Illuminate\Support\Facades\App;
+use App\Http\Requests\UserRequest;
+use App\Repository\UserRepository;
+use Throwable;
+use Illuminate\Support\Facades\Log;
 
 class userController extends Controller
 {
+  public $user_repo;
+  public $class;
+  public function __construct(UserRepository $user_repo,UserManagement $class)
+  {
+    $this->user_repo = $user_repo;
+    $this->class=$class;
+
+  }
     /**
     *   return all Users 
     *   @author Khushbu Waghela
     */
     public function index()
     {
-        return User::all();
+        try{
+        return $this->user_repo->all_record();
+        }catch(Throwable $e)
+        {
+            return Log::error($e->getMessage());
+        }
     }
 
     /**
@@ -24,8 +38,9 @@ class userController extends Controller
     *   add new User
     *   @author Khushbu waghela
     */
-    public function insertUser(Request $request)
+    public function insertUser(UserRequest $request)
     {
+        try{
         $insertFields=[
             'name'=>$request->name,
             'address'=>$request->address,
@@ -33,9 +48,12 @@ class userController extends Controller
             'email'=>$request->email,
             'gender'=>$request->gender,
         ];
-        $class = App::make(UserManagement::class);
-        $result=$class->insertRecord($insertFields);
+        $result=$this->class->insertRecord($insertFields);
         return $result;
+        }catch(Throwable $e)
+        {
+            return Log::error($e->getMessage());
+        }
     }
 
     /**
@@ -44,18 +62,22 @@ class userController extends Controller
     *   @author Khushbu waghela
     */
     public function updateUser(Request $request)
-    {
+    {   
+        try{
         $update=[
             'id'=>$request->id,
             'name'=>$request->name,
             'address'=>$request->address,
+            'phone'=>$request->phone,
             'email'=>$request->email,
             'gender'=>$request->gender,
         ];
-        // dd($update);
-        $class = App::make(userManagement::class);
-        $result=$class->updateRecord($update);
+        $result=$this->class->updateRecord($update);
         return $result;
+        }catch(Throwable $e)
+        {
+            return Log::error($e->getMessage());
+        }
     }
 
     /**
@@ -63,11 +85,16 @@ class userController extends Controller
     *   delete existing User
     *   @author Khushbu waghela
     */
-    public function deleteUser($id)
+    public function deleteUser(Request $request)
     {
-        $class = App::make(userManagement::class);
-        $result=$class->updateRecord($id);
+        try{
+        $id=$request['id'];
+        $result=$this->class->deleteRecord($id);
         return $result;
+        }catch(Throwable $e)
+        {
+            return Log::error($e->getMessage());
+        }
     }
 
     /**
@@ -77,10 +104,13 @@ class userController extends Controller
     */
     public function logIn(Request $request)
     {
-        $class = App::make(userManagement::class);
-        $result=$class->logIn($request->phone);
+        try{
+        $result=$this->class->logIn($request->phone);
         return $result;
-
+        }catch(Throwable $e)
+        {
+            return Log::error($e->getMessage());
+        }
     }
 
     /**
@@ -90,13 +120,17 @@ class userController extends Controller
     */
     public function verifyOtp(Request $request)
     {
+        try{
           $verify=[
             'phone'=>$request->phone,
             'otp'=>$request->otp,
           ];
-         $class = App::make(userManagement::class);
-         $result=$class->verifyOtp($verify);
-         return $result;
+        $result=$this->class->verifyOtp($verify);
+        return $result;
+        }catch(Throwable $e)
+        {
+            return Log::error($e->getMessage());
+        }
 
     }
 

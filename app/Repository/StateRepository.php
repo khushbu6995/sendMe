@@ -28,6 +28,15 @@ class StateRepository implements StateInterface
     }
 
     /**
+    *   @param $id
+    *   find country id from state table
+    *   @author Khushbu Waghela 
+    */
+    public function country_id($id){
+        return State::where('country_id',$id)->get();
+    }
+
+    /**
     *   @param $update[]
     *   get all record from State table
     *   @author Khushbu Waghela 

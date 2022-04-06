@@ -31,7 +31,7 @@ class UserManagement
                 return ['error'=>'something went wrong'];
             }
         } catch (Throwable $e) {
-        Log::info($e->getMessage());
+        Log::error($e->getMessage());
         // return view('error.error');
         return $e;
         }
@@ -44,7 +44,6 @@ class UserManagement
     */
     public function updateRecord($update)
     {
-        // dd($update);
         try {
            $user=$this->user_repo->update($update);
            if($user)
@@ -55,8 +54,7 @@ class UserManagement
                return ['result'=>'something went wrong'];
            }
         } catch (Throwable $e) {
-              Log::info($e->getMessage());
-            return view('error.error');
+            return  Log::error($e->getMessage());
         }
     }
 
@@ -72,14 +70,13 @@ class UserManagement
            $user=$this->user_repo->delete($id);
            if($user)
            {
-               return ['result'=>'record updated'];
+               return ['result'=>'record Deleted'];
            }
            else{
                return ['result'=>'something went wrong'];
            }
         } catch (Throwable $e) {
-              Log::info($e->getMessage());
-            return view('error.error');
+            return  Log::error($e->getMessage());
         }
     }
 
@@ -97,12 +94,13 @@ class UserManagement
             if(!empty($phone))
             {
                 $otp=mt_rand(1000,9999);
-                $nexmo = app('Nexmo\Client');
-                $nexmo->message()->send([
-                    'to'=>'91'.$phone,
-                    'from'=>'919428762124',
-                    'text'=>'Your Otp is '.$otp.' for verification sendMe App',
-                ]);
+                Log::info("Your Otp is '.$otp.' for verification sendMe App");
+                // $nexmo = app('Nexmo\Client');
+                // $nexmo->message()->send([
+                //     'to'=>'91'.$phone,
+                //     'from'=>'919090909090',
+                //     'text'=>'Your Otp is '.$otp.' for verification sendMe App',
+                // ]);
                 $otp=[
                     'phone'=>$phone,
                     'otp'=>$otp,
@@ -114,9 +112,7 @@ class UserManagement
                return ['error'=>'Enter Valid Number'];
            }
         } catch (Throwable $e) {
-              Log::info($e->getMessage());
-            // return view('error.error');
-            return $e;
+            return  Log::error("message");($e->getMessage());
         }
     }
 
@@ -129,15 +125,14 @@ class UserManagement
     {
         try{
             $existingOtp=$this->user_repo->verifyOtp($verify);
-            if(!empty($existingOtp->otp)){
-                return ["success"=> "LoggedIn successfully"];
-            }else{
+            if(empty($existingOtp->otp)){
                 return ["error"=> "please Enter Valid otp"];
+            }else{
+                return ["success"=> "LoggedIn successfully"];
             }
         }
         catch(\Throwable $e){
-            Log::info($e->getMessage());
-            return $e;
+            return Log::error($e->getMessage());
         }
     }
 

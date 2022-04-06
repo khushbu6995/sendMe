@@ -55,4 +55,31 @@ class AreaRepository implements AreaInterface
     {
        return  Area::find($id)->delete();
     }
+
+    /**
+    *   @param $id
+    *   find state id from area table
+    *   @author Khushbu Waghela 
+    */
+    public function state_id($id){
+      return Area::where('state_id',$id)->get();
+   }
+
+   /**
+    *   @param $id
+    *   find city id from area table
+    *   @author Khushbu Waghela 
+    */
+    public function city_id($id){
+      return Area::where('city_id',$id)->get();
+   }
+
+   /**
+   *   @param $id
+   *   find country id from area table
+   *   @author Khushbu Waghela 
+   */
+   public function country_id($id){
+      return Area::where('country_id',$id)->get();
+   }
 }

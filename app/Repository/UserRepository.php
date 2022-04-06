@@ -7,6 +7,14 @@ use phpDocumentor\Reflection\PseudoTypes\LowercaseString;
 
 class UserRepository implements UserInterface
 {
+    /**
+    *   get all record from State table
+    *   @author Khushbu Waghela 
+    */
+    public function all_record()
+    {
+       return User::all();
+    }
 
     /**
     *   @param $insertFields

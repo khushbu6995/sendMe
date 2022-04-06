@@ -7,6 +7,15 @@ use phpDocumentor\Reflection\PseudoTypes\LowercaseString;
 
 class ProductRepository implements ProductInterface
 {
+     /**
+    *   @param $update[]
+    *   get all record from Country table
+    *   @author Khushbu Waghela 
+    */
+    public function all_record(){
+        return Product::all();
+    }
+
     /**
     *   @param $insertFields
     *   add new record in product table
@@ -28,6 +37,15 @@ class ProductRepository implements ProductInterface
     }
 
     /**
+    *   @param $id
+    *   find category id from product table
+    *   @author Khushbu Waghela 
+    */
+    public function category_id($id){
+        return Product::where('category_id',$id)->get();
+    }
+
+    /**
     *   @param $update[]
     *   update record from product table
     *   @author Khushbu Waghela 
@@ -43,6 +61,6 @@ class ProductRepository implements ProductInterface
     */
     public function delete($id)
     {
-       return Product::find($id)->delete();
+        return Product::find($id)->delete();
     }
 }

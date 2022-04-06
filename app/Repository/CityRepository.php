@@ -56,4 +56,22 @@ class CityRepository implements CityInterface
     {
        return City::find($id)->delete();
     }
+
+    /**
+    *   @param $id
+    *   find state id from city table
+    *   @author Khushbu Waghela 
+    */
+    public function state_id($id){
+       return City::where('state_id',$id)->get();
+    }
+
+    /**
+    *   @param $id
+    *   find country id from city table
+    *   @author Khushbu Waghela 
+    */
+    public function country_id($id){
+       return City::where('country_id',$id)->get();
+    }
 }

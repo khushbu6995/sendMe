@@ -3,29 +3,29 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Area;
-use Illuminate\Support\Facades\App;
-use App\Models\City;
-use App\Models\Country;
-use App\Models\State;
 use App\Services\AreaManagement;
 use App\Repository\AreaRepository;
 use App\Repository\CityRepository;
 use App\Repository\StateRepository;
 use App\Repository\CountryRepository;
-use App\Http\Requests\areaRequest;
+use App\Http\Requests\AreaRequest;
+use Throwable;
+use Illuminate\Support\Facades\Log;
+
 class areaController extends Controller
 {
     public $area_repo;
     public $city_repo;
     public $state_repo;
     public $country_repo;
-    public function __construct(AreaRepository $area_repo,CityRepository $city_repo,StateRepository $state_repo,CountryRepository $country_repo)
+    public $class;
+    public function __construct(AreaRepository $area_repo,CityRepository $city_repo,StateRepository $state_repo,CountryRepository $country_repo,AreaManagement $class)
     {
       $this->area_repo = $area_repo;
       $this->city_repo = $city_repo;
       $this->state_repo = $state_repo;
       $this->country_repo = $country_repo;
+      $this->class=$class;
     }
 
     /**
@@ -34,19 +34,11 @@ class areaController extends Controller
     */
     public function index()
     {
-        return Area::all();
-    }
-
-    /**
-    * add new area form
-    * @author Khushbu Waghela
-    */
-    public function addArea()
-    {
-        $cities=City::all();
-        $countries=Country::all();
-        $states=State::all();
-        return view('add_area',compact('cities','states','countries'));
+        try{
+        return $this->area_repo->all_record();;
+        }catch(Throwable $e){
+            return Log::error($e->getMessage());
+        }
     }
 
     /**
@@ -54,32 +46,20 @@ class areaController extends Controller
     * add new area 
     * @author Khushbu Waghela
     */
-    public function insertArea(Request $request)
+    public function insertArea(AreaRequest $request)
     {
+        try{
         $insertFields=[
             'name'=>$request->name,
             'city_id'=>$request->city,
             'state_id'=>$request->state,
             'country_id'=>$request->country,
         ];
-        $class = App::make(AreaManagement::class);
-        $result=$class->insertRecord($insertFields);
+        $result=$this->class->insertRecord($insertFields);
         return $result;
-    }
-
-    /**
-    * edit area form
-    * @author Khushbu Waghela
-    */
-    public function editArea($id)
-    {
-    $area=$this->area_repo->id_find($id);
-    $cities=$this->city_repo->all_record();
-    $states=$this->state_repo->all_record();
-    $countries=$this->country_repo->all_record();
-    // dd($cities);
-    return view('edit_area',compact('area','cities','states','countries'));
-
+        }catch(Throwable $e){
+            return Log::error($e->getMessage());
+        }
     }
 
     /**
@@ -89,6 +69,7 @@ class areaController extends Controller
     */
     public function updateArea(Request $request)
     {
+        try{
         $update=[
             'id'=>$request->id,
             'name'=>$request->name,
@@ -96,9 +77,11 @@ class areaController extends Controller
             'state_id'=>$request->state,
             'country_id'=>$request->country,
         ];
-        $class = App::make(AreaManagement::class);
-        $result=$class->updateRecord($update);
+        $result=$this->class->updateRecord($update);
         return $result;
+        }catch(Throwable $e){
+            return Log::error($e->getMessage());
+        }
     }
 
     /**
@@ -108,8 +91,11 @@ class areaController extends Controller
     */
     public function deleteArea($id)
     {
-        $class = App::make(AreaManagement::class);
-        $result=$class->deleteRecord($id);
+        try{
+        $result=$this->class->deleteRecord($id);
         return $result;
+        }catch(Throwable $e){
+            return Log::error($e->getMessage());
+        }
     }
 }

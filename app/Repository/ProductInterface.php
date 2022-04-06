@@ -5,6 +5,11 @@ namespace App\Repository;
 interface ProductInterface
 {
     /**
+    *   get all record from product table
+    *   @author Khushbu Waghela 
+    */
+    public function all_record();
+    /**
     *   @param $insertFields
     *   add new record in product table
     *   @author Khushbu Waghela 
@@ -17,6 +22,13 @@ interface ProductInterface
     *   @author Khushbu Waghela 
     */
     public function id_find($id);
+
+    /**
+    *   @param $id
+    *   find category id from product table
+    *   @author Khushbu Waghela 
+    */
+    public function category_id($id);
 
     /**
     *   @param $update[]

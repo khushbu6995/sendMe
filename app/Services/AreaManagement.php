@@ -24,14 +24,13 @@ class AreaManagement
             $area=$this->area_repo->store($insertFields);
             if($area)
             {
-                return ['result'=>'record inserted'];
+                return ['result'=>'record inserted','data'=>$area];
             }
             else{
                 return ['result'=>'something went wrong'];
             }
         } catch (Throwable $e) {
-             Log::info($e->getMessage());
-            return view('error.error');
+            return  Log::error($e->getMessage());
         }
     }
 
@@ -43,8 +42,8 @@ class AreaManagement
     public function updateRecord($update)
     {
         try {
-           $country=$this->area_repo->update($update);
-           if($country)
+           $area=$this->area_repo->update($update);
+           if($area)
            {
                return ['result'=>'record updated'];
            }
@@ -52,8 +51,7 @@ class AreaManagement
                return ['result'=>'something went wrong'];
            }
         } catch (Throwable $e) {
-             Log::info($e->getMessage());
-            return view('error.error');
+            return  Log::error($e->getMessage());
         }
     }
 

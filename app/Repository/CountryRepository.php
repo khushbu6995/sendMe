@@ -30,7 +30,6 @@ class CountryRepository implements CountryInterface
     }
 
     /**
-    *   @param $update[]
     *   get all record from Country table
     *   @author Khushbu Waghela 
     */

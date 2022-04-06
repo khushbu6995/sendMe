@@ -2,16 +2,25 @@
 
 namespace App\Services;
 
+use App\Repository\AreaRepository;
+use App\Repository\CityRepository;
 use App\Repository\CountryRepository ;
+use App\Repository\StateRepository;
 use Throwable;
 use Illuminate\Support\Facades\Log;
 
 class CountryManagement
 {   
     public $country_repo;
-    public function __construct(CountryRepository $country_repo)
+    public $state_repo;
+    public $city_repo;
+    public $area_repo;
+    public function __construct(CountryRepository $country_repo,StateRepository $state_repo,CityRepository $city_repo,AreaRepository $area_repo)
     {
         $this->country_repo = $country_repo;
+        $this->state_repo = $state_repo;
+        $this->city_repo = $city_repo;
+        $this->area_repo = $area_repo;
     }
 
     /**
@@ -21,20 +30,17 @@ class CountryManagement
     */
     public function insertRecord($insertFields)
     {
-        // dd($insertFields);
         try {
            $country=$this->country_repo->store($insertFields);
-        //    dd($country);
            if($country)
            {
-               return ['result'=>'record inserted'];
+               return ['success: '=>'record inserted','data :'=>$country];
            }
            else{
-               return ['result'=>'something went wrong'];
+               return ['error: '=>'something went wrong'];
            }
         } catch (Throwable $e) {
-              Log::info($e->getMessage());
-            return view('error.error');
+            return  Log::info($e->getMessage());
         }
     }
 
@@ -49,14 +55,13 @@ class CountryManagement
            $country=$this->country_repo->update($update);
            if($country)
            {
-               return ['result'=>'record updated'];
+               return ['success :'=>'record updated'];
            }
            else{
-               return ['result'=>'something went wrong'];
+               return ['error'=>'something went wrong'];
            }
         } catch (Throwable $e) {
-              Log::info($e->getMessage());
-            return view('error.error');
+            return  Log::error($e->getMessage());
         }
     }
 
@@ -68,17 +73,23 @@ class CountryManagement
     public function deleteRecord($id)
     {
         try {
-           $country=$this->country_repo->delete($id);
-           if($country)
-           {
-               return ['result'=>'record deleted'];
-           }
-           else{
-               return ['result'=>'something went wrong'];
-           }
+            $state=$this->state_repo->country_id($id);
+            $city=$this->city_repo->country_id($id);
+            $area=$this->area_repo->country_id($id);
+            if(!empty($state) && !empty($city) && !empty($area)){
+                return ['error'=>'country already assigned'];
+            }else{
+                $country=$this->country_repo->delete($id);
+                if($country)
+                {
+                    return ['result'=>'record deleted'];
+                }
+                else{
+                    return ['result'=>'something went wrong'];
+                }
+            }
         } catch (Throwable $e) {
-              Log::info($e->getMessage());
-            return view('error.error');
+            return  Log::error($e->getMessage());
         }
     }
 

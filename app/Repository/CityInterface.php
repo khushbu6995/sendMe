@@ -19,6 +19,20 @@ interface CityInterface
     public function id_find($id);
 
     /**
+    *   @param $id
+    *   find state id from state table
+    *   @author Khushbu Waghela 
+    */
+    public function state_id($id);
+
+    /**
+    *   @param $id
+    *   find country id from country table
+    *   @author Khushbu Waghela 
+    */
+    public function country_id($id);
+
+    /**
     *   @param $update[]
     *   get all record from City table
     *   @author Khushbu Waghela 

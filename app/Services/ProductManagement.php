@@ -53,9 +53,8 @@ class ProductManagement
                return ['result'=>'something went wrong'];
            }
         } catch (Throwable $e) {
-             Log::info($e->getMessage());
-            return view('error.error');
-        }
+            return Log::error($e->getMessage());
+           }
     }
 
     /**
@@ -65,8 +64,10 @@ class ProductManagement
     */
     public function deleteRecord($id)
     {
+        // dd($id);
         try {
            $product=$this->product_repo->delete($id);
+        //    dd($product);
            if($product)
            {
                return ['result'=>'record deleted'];
@@ -75,9 +76,8 @@ class ProductManagement
                return ['result'=>'something went wrong'];
            }
         } catch (Throwable $e) {
-             Log::info($e->getMessage());
-            return view('error.error');
-        }
+            return Log::error($e->getMessage());
+            }
     }
 
 }

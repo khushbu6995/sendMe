@@ -17,8 +17,10 @@ class CreateStatesTable extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('country_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->softDeletes(); 
             $table->timestamps();
         });
+        Schema::enableForeignKeyConstraints();
     }
 
     /**

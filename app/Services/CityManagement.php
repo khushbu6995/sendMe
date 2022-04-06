@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Repository\AreaRepository;
 use App\Repository\CityRepository ;
 
 use Throwable;
@@ -10,9 +11,11 @@ use Illuminate\Support\Facades\Log;
 class CityManagement
 {   
     public $city_repo;
-    public function __construct(CityRepository $city_repo)
+    public $area_repo;
+    public function __construct(CityRepository $city_repo,AreaRepository $area_repo)
     {
         $this->city_repo = $city_repo;
+        $this->area_repo = $area_repo;
     }
 
     /**
@@ -25,17 +28,15 @@ class CityManagement
         // dd($insertFields);
         try {
             $city=$this->city_repo->store($insertFields);
-            // dd($city);
             if($city)
             {
-                return ['result'=>'record inserted'];
+                return ['result'=>'record inserted','data'=>$city];
             }
             else{
                 return ['result'=>'something went wrong'];
             }
-        } catch (Throwable $e) {
-              Log::info($e->getMessage());
-            return view('error.error');
+        }catch (Throwable $e) {
+            return  Log::error($e->getMessage());
         }
     }
 
@@ -47,8 +48,8 @@ class CityManagement
     public function updateRecord($update)
     {
         try {
-           $country=$this->city_repo->update($update);
-           if($country)
+           $city=$this->city_repo->update($update);
+           if($city)
            {
                return ['result'=>'record updated'];
            }
@@ -56,9 +57,8 @@ class CityManagement
                return ['result'=>'something went wrong'];
            }
         } catch (Throwable $e) {
-              Log::info($e->getMessage());
-            return view('error.error');
-        }
+            return  Log::error($e->getMessage());
+       }
     }
 
     /**
@@ -69,17 +69,21 @@ class CityManagement
     public function deleteRecord($id)
     {
         try {
-           $country=$this->city_repo->delete($id);
-           if($country)
-           {
-               return ['result'=>'record deleted'];
-           }
-           else{
-               return ['result'=>'something went wrong'];
-           }
+            $area=$this->area_repo->city_id($id);
+            if(!empty($area)){
+                return ['error'=>'City already assigned'];
+            }else{
+                $country=$this->city_repo->delete($id);
+                if($country)
+                {
+                    return ['result'=>'record deleted'];
+                }
+                else{
+                    return ['result'=>'something went wrong'];
+                }
+        }
         } catch (Throwable $e) {
-              Log::info($e->getMessage());
-            return view('error.error');
+              return Log::error($e->getMessage());
         }
     }
 
