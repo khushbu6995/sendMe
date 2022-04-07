@@ -89,10 +89,10 @@ class areaController extends Controller
     * delete existing area
     * @author Khushbu Waghela
     */
-    public function deleteArea($id)
+    public function deleteArea(Request $request)
     {
         try{
-        $result=$this->class->deleteRecord($id);
+        $result=$this->class->deleteRecord($request['id']);
         return $result;
         }catch(Throwable $e){
             return Log::error($e->getMessage());
